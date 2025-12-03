@@ -3,6 +3,8 @@
 Context::Context(){
     alarm = false;
     preAlarm = false;
+    droneIn = true;
+    blinking = false;
 }
 
 void Context::setAlarmOff(){
@@ -29,6 +31,14 @@ void Context::setDroneOut(){
     droneIn = false;
 }
 
+void Context::setBlinkingOn(){
+    blinking = true;
+}
+
+void Context::setBlinkingOff(){
+    blinking = false;
+}
+
 bool Context::isInPreAlarm(){
     return preAlarm;
 }
@@ -39,4 +49,8 @@ bool Context::isInAlarm(){
 
 bool Context::isDroneIn(){
     return droneIn;
+}
+
+bool Context::isBlinking(){
+    return blinking;
 }
