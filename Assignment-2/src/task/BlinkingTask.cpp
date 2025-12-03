@@ -16,11 +16,11 @@ void BlinkingTask::tick(){
                 Logger.log(F("[BT] IDLE"));
             }
 
-            if(pContext->isInAlarm){
+            if(pContext->isInAlarm()){
                 setState(OFF);
             }
 
-            if(this->isActive){
+            if(this->isActive()){
                 setState(ON);
             }
 
@@ -33,10 +33,10 @@ void BlinkingTask::tick(){
                 Logger.log(F("[BT] IDLE"));
             }
 
-            if(pContext->isInAlarm){
+            if(pContext->isInAlarm()){
                 setState(IDLE);
             } else {
-                if(this->!isActive){
+                if(!this->isActive()){
                     setState(IDLE);
                 }
                 setState(ON);
@@ -51,10 +51,10 @@ void BlinkingTask::tick(){
                 Logger.log(F("[BT] IDLE"));
             }
 
-            if(pContext->isInAlarm){
+            if(pContext->isInAlarm()){
                 setState(IDLE);
             } else {
-                if(this->!isActive){
+                if(!this->isActive()){
                     setState(IDLE);
                 }
                 setState(OFF);
@@ -65,7 +65,7 @@ void BlinkingTask::tick(){
     }
 }
 
-void BlinkingTask::setState(int s){
+void BlinkingTask::setState(State s){
     state = s;
     justEntered = true; 
 }

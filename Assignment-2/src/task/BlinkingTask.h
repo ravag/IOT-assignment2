@@ -13,16 +13,17 @@ class BlinkingTask: public Task {
         void tick();
 
     private:
-        void setState(int State);
         void log(String& msg);
 
         bool checkAndSetJustEntered();
 
-        enum { IDLE, OFF, ON } state;
+        enum State{ IDLE, OFF, ON } state;
         bool justEntered;
+
+        void setState(State state);
 
         Led* pLed;
         Context* pContext;
-}
+};
 
 #endif
