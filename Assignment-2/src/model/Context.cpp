@@ -2,6 +2,7 @@
 
 Context::Context(){
     alarm = false;
+    preAlarm = false;
 }
 
 void Context::setAlarmOff(){
@@ -10,6 +11,18 @@ void Context::setAlarmOff(){
 
 void Context::setAlarmOn(){
     alarm = true;
+}
+
+void Context::setPreAlarmOff(){
+    preAlarm = false;
+}
+
+void Context::setPreAlarmOn(){
+    preAlarm = true;
+}
+
+bool Context::isInPreAlarm(){
+    return preAlarm;
 }
 
 bool Context::isInAlarm(){

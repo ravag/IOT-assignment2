@@ -3,7 +3,7 @@
 
 class Button {
  
-public: 
+public:
   virtual bool isPressed() = 0;
 };
 
