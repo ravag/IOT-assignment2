@@ -21,10 +21,22 @@ void Context::setPreAlarmOn(){
     preAlarm = true;
 }
 
+void Context::setDroneIn(){
+    droneIn = true;
+}
+
+void Context::setDroneOut(){
+    droneIn = false;
+}
+
 bool Context::isInPreAlarm(){
     return preAlarm;
 }
 
 bool Context::isInAlarm(){
     return alarm;
+}
+
+bool Context::isDroneIn(){
+    return droneIn;
 }

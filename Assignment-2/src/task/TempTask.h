@@ -4,28 +4,31 @@
 #include "kernel/Task.h"
 #include "model/Context.h"
 #include "devices/Led.h"
-#include "devices/TempSensor.h"
+#include "devices/TempSensorTMP36.h"
+#include "devices/ButtonImpl.h"
 #include <Arduino.h>
 
 class TempTask: public Task {
 
     public:
-        TempTask(Led* pLed, TempSensor* pTempSensor, Context* pContext);
+        TempTask(Led* pLed, TempSensorTMP36* pTempSensor, ButtonImpl* pButton, Context* pContext);
         void tick();
 
     private:
-        void setState(int state);
         long elapsedTimeInState();
         void log(const String& msg);
 
         bool checkAndSetJustEntered();
 
-        enum { D_OUT, D_IN, O_T1, O_T2, W_NM, W_RS} state;
+        enum State { IDLE, D_IN, O_T1, O_T2, W_NM, W_RS} state;
         long stateTimestamp;
         bool justEntered;
 
+        void setState(State state);
+
         Led* pLed;
-        TempSensor* pTempSensor;
+        TempSensorTMP36* pTempSensor;
+        ButtonImpl* pButton;
         Context* pContext;
 };
 

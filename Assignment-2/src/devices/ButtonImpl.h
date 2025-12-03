@@ -8,9 +8,13 @@ class ButtonImpl: public Button {
 public: 
   ButtonImpl(int pin);
   bool isPressed();
+  void resetButton();
+  void buttonPressed();
 
 private:
+
   int pin;
+  bool button;
 
 };
 

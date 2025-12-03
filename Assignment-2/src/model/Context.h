@@ -10,13 +10,17 @@ class Context{
         void setAlarmOff();
         void setPreAlarmOn();
         void setPreAlarmOff();
+        void setDroneIn();
+        void setDroneOut();
 
         bool isInAlarm();
         bool isInPreAlarm();
+        bool isDroneIn();
 
     private:
         bool alarm;
         bool preAlarm;
+        bool droneIn;
 
 };
 
