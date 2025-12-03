@@ -20,6 +20,10 @@ void BlinkingTask::tick(){
                 setState(OFF);
             }
 
+            if(this->isActive){
+                setState(ON);
+            }
+
             break;
         }
 
@@ -32,6 +36,9 @@ void BlinkingTask::tick(){
             if(pContext->isInAlarm){
                 setState(IDLE);
             } else {
+                if(this->!isActive){
+                    setState(IDLE);
+                }
                 setState(ON);
             }
 
@@ -47,6 +54,9 @@ void BlinkingTask::tick(){
             if(pContext->isInAlarm){
                 setState(IDLE);
             } else {
+                if(this->!isActive){
+                    setState(IDLE);
+                }
                 setState(OFF);
             }
 
@@ -68,4 +78,4 @@ bool BlinkingTask::checkAndSetJustEntered(){
     }
 
     return bak;
-}
+}   
