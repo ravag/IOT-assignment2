@@ -9,7 +9,9 @@
 #include "model\Context.h"
 #include <Arduino.h>
 
-#define TIME2 3000
+#define CLOSING_DISTANCE 1.0
+#define DISTANCE_TIME 3000
+#define TIME_TO_OPEN 5000
 
 class LandingTask: public Task {
     public:
@@ -22,6 +24,10 @@ class LandingTask: public Task {
 
         bool checkAndSetJustEntered();
 
+        void closeDoor();
+        void openDoor();
+        bool isDoorOpen();
+
         enum State { IDLE, DOOR_OPENING, DOOR_OPEN, DRONE_LANDED, DOOR_CLOSING, ALARM } state;
         bool justEntered;
 
@@ -31,6 +37,7 @@ class LandingTask: public Task {
         LiquidCrystal_I2C* pLCD;
         Context* pContext;
         long lastTime;
+        long timeInState;
 }
 
 #endif
