@@ -60,7 +60,7 @@ void TakeOffTask::tick() {
             }
             
             long dt = millis() - timeInState;
-            motor->setPosition((dt/TIME_TO_OPEN)*90);
+            motor->setPosition(((float)(dt/TIME_TO_OPEN))*90);
 
             if (this->motor->getPosition() == 90)
             {
@@ -111,7 +111,7 @@ void TakeOffTask::tick() {
             }
 
             long dt = millis() - timeInState;
-            motor->setPosition((dt/TIME_TO_OPEN) * 90);
+            motor->setPosition( 90 - ((float)(dt/TIME_TO_OPEN) * 90));
 
             if (motor->getPosition() == 0)
             {
