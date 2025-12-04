@@ -11,6 +11,7 @@
 
 #define CLOSING_DISTANCE 1.0
 #define DISTANCE_TIME 3000
+#define TIME_TO_OPEN 5000
 
 class TakeOffTask : public Task {
 private:
@@ -23,6 +24,9 @@ private:
     long timePass;
     long lastTime;
     bool alreadyOver;
+    bool alarm;
+    bool justEntered;
+    int timeInState;
 
     enum State {OPENING, CLOSING, ALARM, IDLE, OPEN} state;
 

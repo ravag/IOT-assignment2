@@ -9,20 +9,29 @@ TakeOffTask :: TakeOffTask(Context* pContext, Sonar* pSensor, ServoMotor* pMotor
     lcd->setCursor(2,1);
     lcd->print("DRONE INSIDE");
     this->alreadyOver = false;
+    this->alarm = false;
 }
 
 void TakeOffTask::setState(State s) {
     state = s;
+    timeInState = millis();
+    this->justEntered = true;
 }
 
 void TakeOffTask::tick() {
+    if (this->context->isInAlarm())
+    {
+        this->setState(CLOSING);
+        this->alarm = true;
+    }
+    
     switch (this->state)
     {
         case IDLE:
             Msg* msg = MsgService.receiveMsg();
             if (msg != NULL)
             {
-                if (msg == "Depart")
+                if (/* msg == "Depart" && */ !this->context->isInPreAlarm())
                 {
                     this->setState(OPENING);
                     this->context->setBlinkingOn();
@@ -36,13 +45,29 @@ void TakeOffTask::tick() {
             break;
 
         case OPENING:
-            motor->on();
-            motor->setPosition(/*calculate position (dt/TIME_TO_OPEN)*90 */);
-            /*inserisci nel motore un metodo per ottenere la sua posizione*/
+            if (justEntered)
+            {
+                this->motor->on();
+                justEntered = false;
+            }
+            
+            long dt = millis() - timeInState;
+            motor->setPosition((dt/TIME_TO_OPEN)*90);
+
+            if (this->motor->getPosition() == 90)
+            {
+                this->setState(OPEN);
+            }
+            
             break;
 
         case OPEN:
-            motor->off();
+            if (justEntered)
+            {
+                this->motor->off();
+                justEntered = false;
+            }
+
             sensor->setTemperature(temp->getTemperature());
             float dist = sensor->getDistance();
             /*se sei sopra una distaza d per t secondi comincia a chiudere*/
@@ -69,17 +94,29 @@ void TakeOffTask::tick() {
             break;
 
         case CLOSING:
-            motor->on();
-            motor->setPosition(/*calcola posizione in base al tempo*/);
+            if(justEntered)
+            {
+                this->motor->on();
+                justEntered = false;
+            }
+            
+            long dt = millis() - timeInState;
+            motor->setPosition((dt/TIME_TO_OPEN) * 90);
 
-            if (/*angolo motore == 0 oppure crea metodo is closed*/)
+            if (motor->getPosition() == 0)
             {
                 motor->off();
                 context->setBlinkingOff();
+                this->setState(this->alarm ? ALARM : IDLE);
+            }
+            
+            break;
+        case ALARM:
+            if (!this->context->isInAlarm())
+            {
                 this->setState(IDLE);
             }
             
             break;
-        
     }
 }
