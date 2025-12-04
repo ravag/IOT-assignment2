@@ -1,4 +1,4 @@
-#include "Task\BlinkingTask.h"
+#include "BlinkingTask.h"
 #include "config.h"
 #include <Arduino.h>
 #include "kernel\Logger.h"

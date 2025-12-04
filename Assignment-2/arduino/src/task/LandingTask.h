@@ -4,7 +4,7 @@
 #include "devices\ServoMotor.h"
 #include "devices\PresenceSensor.h"
 #include "devices\ProximitySensor.h"
-#include <LiquidCrystal_I2C>
+#include "LiquidCrystal_I2C.h"
 #include "kernel\Task.h"
 #include "model\Context.h"
 #include <Arduino.h>
@@ -19,7 +19,6 @@ class LandingTask: public Task {
         void tick();
 
     private:
-        void setState(State state);
         void log(String& msg);
 
         bool checkAndSetJustEntered();
@@ -31,6 +30,8 @@ class LandingTask: public Task {
         enum State { IDLE, DOOR_OPENING, DOOR_OPEN, DRONE_LANDED, DOOR_CLOSING, ALARM } state;
         bool justEntered;
 
+        void setState(State state);
+
         ServoMotor* pMotor;
         PresenceSensor* pPIR;
         ProximitySensor* pSonar;
@@ -38,6 +39,6 @@ class LandingTask: public Task {
         Context* pContext;
         long lastTime;
         long timeInState;
-}
+};
 
 #endif
