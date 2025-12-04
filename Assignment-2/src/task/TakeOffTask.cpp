@@ -1,6 +1,7 @@
 #include "TakeOffTask.h"
 #include "BlinkingTask.h"
 #include "kernel/MsgService.h"
+#include "kernel/Logger.h"
 
 TakeOffTask :: TakeOffTask(Context* pContext, Sonar* pSensor, ServoMotor* pMotor, LiquidCrystal_I2C* pLcd, TempSensor* pTemp):
  context(pContext),sensor(pSensor), motor(pMotor), lcd(pLcd), temp(pTemp) {
@@ -28,10 +29,16 @@ void TakeOffTask::tick() {
     switch (this->state)
     {
         case IDLE:
+            if (justEntered)
+            {
+                justEntered = false;
+                Logger.log("[TakeOffTask]: Entered Idle State");
+            }
+            
             Msg* msg = MsgService.receiveMsg();
             if (msg != NULL)
             {
-                if (/* msg == "Depart" && */ !this->context->isInPreAlarm())
+                if (msg->getContent() == "Depart" && !this->context->isInPreAlarm())
                 {
                     this->setState(OPENING);
                     this->context->setBlinkingOn();
@@ -49,6 +56,7 @@ void TakeOffTask::tick() {
             {
                 this->motor->on();
                 justEntered = false;
+                Logger.log("[TakeOffTask]: Entered Opening State");
             }
             
             long dt = millis() - timeInState;
@@ -66,6 +74,7 @@ void TakeOffTask::tick() {
             {
                 this->motor->off();
                 justEntered = false;
+                Logger.log("[TakeOffTask]: Entered Open State");
             }
 
             sensor->setTemperature(temp->getTemperature());
@@ -98,20 +107,27 @@ void TakeOffTask::tick() {
             {
                 this->motor->on();
                 justEntered = false;
+                Logger.log("[TakeOffTask]: Entered Closing State");
             }
-            
+
             long dt = millis() - timeInState;
             motor->setPosition((dt/TIME_TO_OPEN) * 90);
 
             if (motor->getPosition() == 0)
             {
-                motor->off();
+                this->motor->off();
                 context->setBlinkingOff();
                 this->setState(this->alarm ? ALARM : IDLE);
             }
             
             break;
         case ALARM:
+            if (justEntered)
+            {
+                justEntered = false;
+                Logger.log("[TakeOffTask]: Entered Alarm State");
+            }
+        
             if (!this->context->isInAlarm())
             {
                 this->setState(IDLE);
