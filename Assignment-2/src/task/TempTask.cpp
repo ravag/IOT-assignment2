@@ -6,22 +6,14 @@ long timeLastState;
 
 TempTask::TempTask(Led* pLed, TempSensorTMP36* pTempSensor, ButtonImpl* pButton, Context* pContext) :
     pContext(pContext), pLed(pLed), pTempSensor(pTempSensor), pButton(pButton) {
-        setState(D_IN);
+        setState(IDLE);
 }
 
 void TempTask::tick() {
     float temp = pTempSensor->getTemperature();
     switch (state) {
     case IDLE:
-        if (pContext->isDroneIn()) {
-            setState(D_IN);
-        }
-        break;
-    
-    case D_IN:
-        if (!pContext->isDroneIn()) {
-            setState(IDLE);
-        } else if (temp > TEMP_T1) {
+        if (temp > TEMP_T1) {
             setState(O_T1);
             timeLastState = 0;
         }
@@ -29,7 +21,7 @@ void TempTask::tick() {
 
     case O_T1:
         if (temp < TEMP_T1) {
-            setState(D_IN);
+            setState(IDLE);
             pContext->setPreAlarmOff();
         } else if (elapsedTimeInState() > T_MAX_3) {
             setState(W_NM);
@@ -61,7 +53,8 @@ void TempTask::tick() {
         if (temp > TEMP_T2) {
             setState(O_T2);
         } else if (temp < TEMP_T1) {
-            setState(D_IN);
+            setState(IDLE);
+            pContext->setPreAlarmOff();
         }
         break;
 
@@ -69,7 +62,7 @@ void TempTask::tick() {
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
             pLed->switchOff();
-            setState(D_IN);
+            setState(IDLE);
         }
         break;
     }

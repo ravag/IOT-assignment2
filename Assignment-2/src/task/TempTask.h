@@ -20,7 +20,7 @@ class TempTask: public Task {
 
         bool checkAndSetJustEntered();
 
-        enum State { IDLE, D_IN, O_T1, O_T2, W_NM, W_RS} state;
+        enum State { IDLE, O_T1, O_T2, W_NM, W_RS} state;
         long stateTimestamp;
         bool justEntered;
 
