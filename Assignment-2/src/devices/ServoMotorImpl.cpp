@@ -4,6 +4,7 @@
 ServoMotorImpl::ServoMotorImpl(int pin){
   this->pin = pin;  
   _on = false;
+  this->position = 0;
 } 
 
 void ServoMotorImpl::on(){
@@ -22,6 +23,7 @@ void ServoMotorImpl::setPosition(int angle){
 	} else if (angle < 0){
 		angle = 0;
 	}
+  position = angle;
   // 750 -> 0, 2250 -> 180 
   // 750 + angle*(2250-750)/180
   // updated values: min is 544, max 2400 (see ServoTimer2 doc)
@@ -32,4 +34,8 @@ void ServoMotorImpl::setPosition(int angle){
 void ServoMotorImpl::off(){
   _on = false;
   motor.detach();    
+}
+
+int ServoMotorImpl::getPosition() {
+  return this->position;
 }
