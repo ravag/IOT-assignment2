@@ -70,6 +70,10 @@ void LandingTask::tick(){
                     Logger.log(F("[LT] DRONE LANDED"));
                     lastTime = millis();
                 }
+                float dist = pSonar->getDistance();
+                /*se sei sopra una distaza d per t secondi comincia a chiudere*/
+                Serial.print("lo");
+                Serial.println(dist);
 
                 if(pContext->isInAlarm()) {
                     setState(DOOR_CLOSING);
