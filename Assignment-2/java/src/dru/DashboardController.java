@@ -1,6 +1,9 @@
 package dru;
 
 public class DashboardController {
+
+    static final String REQUEST_LANDING = "rl";
+    static final String REQUEST_TAKEOFF = "rtk";
     
     SerialCommChannel channel;
     DashBoardView view;
@@ -16,5 +19,13 @@ public class DashboardController {
         System.out.println("Waiting Arduino for rebooting...");
         Thread.sleep(4000);
         System.out.println("Ready.");
+    }
+
+    public void requestLanding(){
+        channel.sendMsg(REQUEST_LANDING);
+    }
+
+    public void requestTakeOff(){
+        channel.sendMsg(REQUEST_TAKEOFF);
     }
 }

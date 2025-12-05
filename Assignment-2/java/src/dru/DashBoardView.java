@@ -65,7 +65,11 @@ public class DashBoardView extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            
+            if(e.getSource() == landing) {
+                controller.requestLanding();
+            } else if (e.getSource() == takeOff) {
+                controller.requestTakeOff();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -1,5 +1,4 @@
-#include "Task\LandingTask.h"
-#include "config.h"
+#include "LandingTask.h"
 #include <Arduino.h>
 #include "kernel\Logger.h"
 
@@ -16,7 +15,7 @@ void LandingTask::tick(){
                 Logger.log(F("[BT] IDLE"));
             }
 
-            if(pContext->isInAlarm) {
+            if(pContext->isInAlarm()) {
                 setState(DOOR_CLOSING);
             }
 
@@ -30,13 +29,13 @@ void LandingTask::tick(){
         case DOOR_OPENING: {
             if(this->checkAndSetJustEntered()){     
                 pContext->setBlinkingOn();
-                pLCD->print("LANDING")
+                pLCD->print("LANDING");
                 pMotor->on();
                 Logger.log(F("[BT] DOOR OPENING"));
             }
             this->openDoor();
 
-            if(pContext->isInAlarm) {
+            if(pContext->isInAlarm()) {
                 setState(DOOR_CLOSING);
             }
 
@@ -54,7 +53,7 @@ void LandingTask::tick(){
                 Logger.log(F("[BT] DOOR OPEN"));
             }
 
-            if(pContext->isInAlarm) {
+            if(pContext->isInAlarm()) {
                 setState(DOOR_CLOSING);
             }
 
@@ -72,7 +71,7 @@ void LandingTask::tick(){
                 Logger.log(F("[BT] DRONE LANDED"));
             }
 
-            if(pContext->isInAlarm) {
+            if(pContext->isInAlarm()) {
                 setState(DOOR_CLOSING);
             }
 
@@ -100,9 +99,9 @@ void LandingTask::tick(){
             }
             this->closeDoor();
 
-            if(!this->isDoorOpen() && pContext->isInAlarm) {
+            if(!this->isDoorOpen() && pContext->isInAlarm()) {
                 setState(ALARM);
-            } else if(!this->isDoorOpen() && !pContext->isInAlarm) {
+            } else if(!this->isDoorOpen() && !pContext->isInAlarm()) {
                 setState(IDLE);
             } else {
                 setState(DOOR_CLOSING);
@@ -117,7 +116,7 @@ void LandingTask::tick(){
                 Logger.log(F("[BT] ALARM"));
             }
 
-            if(!pContext->isInAlarm){
+            if(!pContext->isInAlarm()){
                 setState(IDLE);
             }
 
