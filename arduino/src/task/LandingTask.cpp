@@ -131,7 +131,7 @@ void LandingTask::closeDoor(){
     long dt = millis() - timeInState;
     pMotor->setPosition(90 - ((dt / TIME_TO_OPEN) * 90));
 
-    if(pMotor->getPosition() == 0){
+    if(pMotor->getPosition() <= 0){
         pMotor->off();
         pContext->setBlinkingOff();
     }
@@ -141,14 +141,14 @@ void LandingTask::openDoor(){
     long dt = millis() - timeInState;
     pMotor->setPosition((dt / TIME_TO_OPEN) * 90);
 
-    if(pMotor->getPosition() == 90){
+    if(pMotor->getPosition() >= 90){
         pMotor->off();
         pContext->setBlinkingOff();
     }
 }
 
 bool LandingTask::isDoorOpen(){
-    return pMotor->getPosition() <= 0;
+    return pMotor->getPosition() >= 90;
 }
 
 bool LandingTask::isDroneNear(){
