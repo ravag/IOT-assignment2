@@ -32,6 +32,7 @@ void setup() {
   Pir* pir = new Pir(PROX_PIN);
 
   lcd->init();
+  pMotor->setPosition(0);
   
 
   Task* pTempTask = new TempTask(new Led(ALARM_LED), pTempSensor, new ButtonImpl(BUTTON_PIN), lcd, pContext);
