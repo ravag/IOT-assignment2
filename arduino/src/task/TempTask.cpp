@@ -14,6 +14,7 @@ void TempTask::tick() {
     switch (state) {
     case IDLE:
         if(justEntered) {
+            checkAndSetJustEntered();
             Logger.log("loIDLE-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
@@ -25,6 +26,7 @@ void TempTask::tick() {
 
     case O_T1:
         if(justEntered) {
+            checkAndSetJustEntered();
             Logger.log("loT1-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
@@ -44,6 +46,7 @@ void TempTask::tick() {
 
     case O_T2:
         if(justEntered) {
+            checkAndSetJustEntered();
             Logger.log("loT2-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
@@ -63,6 +66,7 @@ void TempTask::tick() {
 
     case W_NM:
         if(justEntered) {
+            checkAndSetJustEntered();
             Logger.log("loWN-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
@@ -76,6 +80,7 @@ void TempTask::tick() {
 
     case W_RS:
         if(justEntered) {
+            checkAndSetJustEntered();
             Logger.log("loALARM-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
             plcd->setCursor(1,1);
