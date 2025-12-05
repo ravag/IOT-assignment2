@@ -1,6 +1,7 @@
 #include "LandingTask.h"
 #include <Arduino.h>
 #include "kernel\Logger.h"
+#include "kernel/MsgService.h"
 
 LandingTask::LandingTask(ServoMotor* pMotor, Pir* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext):
 pMotor(pMotor), pPIR(pPIR), pSonar(pSonar), pLCD(pLCD), pContext(pContext) {
@@ -18,8 +19,8 @@ void LandingTask::tick(){
             if(pContext->isInAlarm()) {
                 setState(DOOR_CLOSING);
             }
-
-            if(!pContext->isInPreAlarm() && this->receivedSignal && this->isDroneNear()) {
+            Msg* msg = MsgService.receiveMsg(); 
+            if(!pContext->isInPreAlarm() && msg->getContent() == "rl" && this->isDroneNear()) {
                 setState(DOOR_OPENING);
             }
 
