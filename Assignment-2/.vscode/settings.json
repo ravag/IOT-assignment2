@@ -1,9 +1,0 @@
-{
-    "files.watcherExclude": {
-        "**/target": true
-    },
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "java\\lib\\jssc-2.9.4.jar"
-    ]
-}
