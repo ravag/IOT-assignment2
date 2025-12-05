@@ -92,7 +92,6 @@ void TakeOffTask::tick() {
                             lcd->clear();
                             lcd->setCursor(2,1);
                             lcd->print("DRONE OUT");
-                            this->context->setDroneOut();
                         }
                         
                     } else {
@@ -123,6 +122,11 @@ void TakeOffTask::tick() {
                     this->motor->off();
                     context->setBlinkingOff();
                     this->setState(this->context->isInAlarm() ? ALARM : IDLE);
+                    if (!this->context->isInAlarm())
+                    {
+                        this->context->setDroneOut();
+                    }
+                    
                 }
                 
                 break;
