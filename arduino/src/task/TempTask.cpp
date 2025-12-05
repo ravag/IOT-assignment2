@@ -17,10 +17,7 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loIDLE-TEMP");
-            Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
-        Serial.print("lo");
-        Serial.println(pTempSensor->getTemperature());
         if (temp > TEMP_T1) {
             setState(O_T1);
             timeLastState = 0;
@@ -28,6 +25,8 @@ void TempTask::tick() {
         break;
 
     case O_T1:
+        Serial.print("lo");
+        Serial.println(pTempSensor->getTemperature());
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loT1-TEMP");
@@ -57,6 +56,7 @@ void TempTask::tick() {
             setState(O_T1);
             timeLastState = timeLastState + elapsedTimeInState();
         } else if (elapsedTimeInState() > T_MAX_4) {
+            Serial.println("loSono stato sopra i 35 per piu di 2 secondi");
             setState(W_RS);
             pContext->setAlarmOn();
             pContext->setPreAlarmOff();
@@ -86,6 +86,7 @@ void TempTask::tick() {
             checkAndSetJustEntered();
             Logger.log("loALARM-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
+            plcd->clear();
             plcd->setCursor(1,1);
             plcd->print("ALARM");
         }
