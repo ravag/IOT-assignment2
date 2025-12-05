@@ -3,6 +3,8 @@
 #include "kernel\Logger.h"
 #include "kernel/MsgService.h"
 
+static float dist2 = 0.1;
+
 LandingTask::LandingTask(ServoMotor* pMotor, Pir* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext):
 pMotor(pMotor), pPIR(pPIR), pSonar(pSonar), pLCD(pLCD), pContext(pContext) {
     setState(IDLE);
@@ -45,8 +47,6 @@ void LandingTask::tick(){
 
                 if(this->isDoorOpen()) {
                     setState(DOOR_OPEN);
-                } else {
-                    setState(DOOR_OPENING);
                 }
 
                 break;
@@ -59,39 +59,25 @@ void LandingTask::tick(){
 
                 if(pContext->isInAlarm()) {
                     setState(DOOR_CLOSING);
+                } else if (pSonar->getDistance() <= dist2) {
+                    this->setState(DRONE_LANDED);
                 }
-
-                if(pPIR->isDetected()) {
-                    setState(DRONE_LANDED);
-                } else {
-                    setState(DOOR_OPEN);
-                }
-
                 break;
             }
 
             case DRONE_LANDED: {
                 if(this->checkAndSetJustEntered()){
                     Logger.log(F("[LT] DRONE LANDED"));
+                    lastTime = millis();
                 }
 
                 if(pContext->isInAlarm()) {
                     setState(DOOR_CLOSING);
-                }
-
-                if(!this->isDroneNear()) {
+                } else if(pSonar->getDistance() > dist2) {
                     setState(DOOR_OPEN);
-                } else {
-                    if(lastTime == 0){
-                        lastTime = millis();
-                    }
-                    if(this->isDroneNear()) {
-                        if(millis() - lastTime >= DISTANCE_TIME) {
-                            setState(DOOR_CLOSING);
-                        }
-                    }
+                } else if (millis() - lastTime >= DISTANCE_TIME) {
+                    this->setState(DOOR_CLOSING);    
                 }
-
                 break;
             }
 
@@ -107,10 +93,7 @@ void LandingTask::tick(){
                     setState(ALARM);
                 } else if(!this->isDoorOpen() && !pContext->isInAlarm()) {
                     setState(IDLE);
-                } else {
-                    setState(DOOR_CLOSING);
                 }
-
                 break;
             }
 
@@ -165,7 +148,7 @@ void LandingTask::openDoor(){
 }
 
 bool LandingTask::isDoorOpen(){
-    return pMotor->getPosition() == 0;
+    return pMotor->getPosition() <= 0;
 }
 
 bool LandingTask::isDroneNear(){
