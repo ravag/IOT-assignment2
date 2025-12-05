@@ -12,6 +12,7 @@ void LandingTask::tick(){
     switch(state){
         case IDLE: {
             if(this->checkAndSetJustEntered()){
+                pLCD->clear();
                 pLCD->print("DRONE IN");
                 Logger.log(F("[LT] IDLE"));
             }
@@ -30,6 +31,7 @@ void LandingTask::tick(){
         case DOOR_OPENING: {
             if(this->checkAndSetJustEntered()){     
                 pContext->setBlinkingOn();
+                pLCD->clear();
                 pLCD->print("LANDING");
                 pMotor->on();
                 Logger.log(F("[LT] DOOR OPENING"));
