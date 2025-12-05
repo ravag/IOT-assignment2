@@ -169,6 +169,8 @@ bool LandingTask::isDoorOpen(){
 bool LandingTask::isDroneNear(){
     if(pPIR->isDetected()){
         Logger.log(F("[LT] DRONE DETECTED"));
+    } else {
+        Logger.log("[LT] DRONE NOT DETECTED");
     }
     return pSonar->getDistance() < CLOSING_DISTANCE;
 }

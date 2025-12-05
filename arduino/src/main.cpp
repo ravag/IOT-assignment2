@@ -25,7 +25,7 @@ void setup() {
   pContext = new Context();
 
   ServoMotorImpl* pMotor = new ServoMotorImpl(MOTOR_PIN);
-  Sonar* pSonar = new Sonar(ECHO_PIN, TRIG_PIN, 200);
+  Sonar* pSonar = new Sonar(ECHO_PIN, TRIG_PIN, 300);
   LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(0x27,20,4);
   TempSensor* pTempSensor = new TempSensorTMP36(TEMP_PIN);
   Led* pLed = new Led(ON_LED);

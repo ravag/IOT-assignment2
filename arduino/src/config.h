@@ -11,8 +11,8 @@
 #define ALARM_LED 5
 #define TEMP_PIN A0
 
-#define TEMP_T1 30
-#define TEMP_T2 35
+#define TEMP_T1 20
+#define TEMP_T2 25
 
 #define T_MAX_3 1000
 #define T_MAX_4 2000 

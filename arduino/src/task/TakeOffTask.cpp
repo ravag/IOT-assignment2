@@ -6,11 +6,6 @@
 TakeOffTask :: TakeOffTask(Context* pContext, Sonar* pSensor, ServoMotor* pMotor, LiquidCrystal_I2C* pLcd, TempSensor* pTemp):
  context(pContext),sensor(pSensor), motor(pMotor), lcd(pLcd), temp(pTemp) {
     setState(IDLE);
-    Serial.println("lo idle set");
-    lcd->clear();
-    lcd->setCursor(2,1) ; 
-    lcd->print("DRONE INSIDE");
-    Serial.println("lo lcd problem");
     this->alreadyOver = false;
     this->alarm = false;
 }
@@ -22,7 +17,10 @@ void TakeOffTask::setState(State s) {
 }
 
 void TakeOffTask::tick() {
-    if (this->context->isInAlarm())
+    if (this->context->isDroneIn())
+    {
+    
+    if (this->context->isInAlarm() && !alarm)
     {
         this->setState(CLOSING);
         this->alarm = true;
@@ -77,11 +75,14 @@ void TakeOffTask::tick() {
                 this->motor->off();
                 justEntered = false;
                 Logger.log("lo[TakeOffTask]: Entered Open State");
+                alreadyOver = false;
             }
 
             sensor->setTemperature(temp->getTemperature());
             dist = sensor->getDistance();
             /*se sei sopra una distaza d per t secondi comincia a chiudere*/
+            Serial.print("lo");
+            Serial.println(dist);
             if (dist > CLOSING_DISTANCE || dist == NO_OBJ_DETECTED) {
                 if (alreadyOver) {
                     timePass = millis() - lastTime;
@@ -91,6 +92,7 @@ void TakeOffTask::tick() {
                         lcd->clear();
                         lcd->setCursor(2,1);
                         lcd->print("DRONE OUT");
+                        this->context->setDroneOut();
                     }
                     
                 } else {
@@ -120,7 +122,7 @@ void TakeOffTask::tick() {
             {
                 this->motor->off();
                 context->setBlinkingOff();
-                this->setState(this->alarm ? ALARM : IDLE);
+                this->setState(this->context->isInAlarm() ? ALARM : IDLE);
             }
             
             break;
@@ -134,8 +136,10 @@ void TakeOffTask::tick() {
             if (!this->context->isInAlarm())
             {
                 this->setState(IDLE);
+                this->alarm = false;
             }
             
             break;
+    }
     }
 }
