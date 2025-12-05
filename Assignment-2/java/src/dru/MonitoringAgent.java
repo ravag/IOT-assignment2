@@ -11,7 +11,7 @@ public class MonitoringAgent extends Thread{
 
     public MonitoringAgent(SerialCommChannel channel, DashBoardView view, LogView log) throws Exception {
         this.view = view;
-        this.logger = logger;
+        this.logger = log;
         this.channel = channel;
     }
 
