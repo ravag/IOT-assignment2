@@ -13,7 +13,7 @@ void LandingTask::tick(){
         case IDLE: {
             if(this->checkAndSetJustEntered()){
                 pLCD->print("DRONE IN");
-                Logger.log(F("[BT] IDLE"));
+                Logger.log(F("[LT] IDLE"));
             }
 
             if(pContext->isInAlarm()) {
@@ -32,7 +32,7 @@ void LandingTask::tick(){
                 pContext->setBlinkingOn();
                 pLCD->print("LANDING");
                 pMotor->on();
-                Logger.log(F("[BT] DOOR OPENING"));
+                Logger.log(F("[LT] DOOR OPENING"));
             }
             this->openDoor();
 
@@ -51,7 +51,7 @@ void LandingTask::tick(){
 
         case DOOR_OPEN: {
             if(this->checkAndSetJustEntered()){
-                Logger.log(F("[BT] DOOR OPEN"));
+                Logger.log(F("[LT] DOOR OPEN"));
             }
 
             if(pContext->isInAlarm()) {
@@ -69,7 +69,7 @@ void LandingTask::tick(){
 
         case DRONE_LANDED: {
             if(this->checkAndSetJustEntered()){
-                Logger.log(F("[BT] DRONE LANDED"));
+                Logger.log(F("[LT] DRONE LANDED"));
             }
 
             if(pContext->isInAlarm()) {
@@ -96,7 +96,7 @@ void LandingTask::tick(){
             if(this->checkAndSetJustEntered()){   
                 pContext->setBlinkingOn();    
                 pMotor->on();     
-                Logger.log(F("[BT] DOOR CLOSING"));
+                Logger.log(F("[LT] DOOR CLOSING"));
             }
             this->closeDoor();
 
@@ -114,7 +114,7 @@ void LandingTask::tick(){
         case ALARM: {
             if(this->checkAndSetJustEntered()){
                 pLCD->print("ALARM");
-                Logger.log(F("[BT] ALARM"));
+                Logger.log(F("[LT] ALARM"));
             }
 
             if(!pContext->isInAlarm()){
