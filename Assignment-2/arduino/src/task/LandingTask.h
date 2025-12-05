@@ -3,6 +3,7 @@
 
 #include "devices\ServoMotor.h"
 #include "devices\PresenceSensor.h"
+#include "devices/Pir.h"
 #include "devices\ProximitySensor.h"
 #include "LiquidCrystal_I2C.h"
 #include "kernel\Task.h"
@@ -15,7 +16,7 @@
 
 class LandingTask: public Task {
     public:
-        LandingTask(ServoMotor* pMotor, PresenceSensor* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext);
+        LandingTask(ServoMotor* pMotor, Pir* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext);
         void tick();
 
     private:
@@ -34,7 +35,7 @@ class LandingTask: public Task {
         void setState(State state);
 
         ServoMotor* pMotor;
-        PresenceSensor* pPIR;
+        Pir* pPIR;
         ProximitySensor* pSonar;
         LiquidCrystal_I2C* pLCD;
         Context* pContext;

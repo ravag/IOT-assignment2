@@ -4,7 +4,7 @@
 
 long timeLastState;
 
-TempTask::TempTask(Led* pLed, TempSensorTMP36* pTempSensor, ButtonImpl* pButton, Context* pContext) :
+TempTask::TempTask(Led* pLed, TempSensor* pTempSensor, ButtonImpl* pButton, Context* pContext) :
     pContext(pContext), pLed(pLed), pTempSensor(pTempSensor), pButton(pButton) {
         setState(IDLE);
 }

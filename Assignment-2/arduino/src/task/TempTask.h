@@ -6,12 +6,13 @@
 #include "devices/Led.h"
 #include "devices/TempSensorTMP36.h"
 #include "devices/ButtonImpl.h"
+#include "LiquidCrystal_I2C.h"
 #include <Arduino.h>
 
 class TempTask: public Task {
 
     public:
-        TempTask(Led* pLed, TempSensorTMP36* pTempSensor, ButtonImpl* pButton, Context* pContext);
+        TempTask(Led* pLed, TempSensor* pTempSensor, ButtonImpl* pButton, LiquidCrystal_I2C* plcd,Context* pContext);
         void tick();
 
     private:
@@ -27,8 +28,9 @@ class TempTask: public Task {
         void setState(State state);
 
         Led* pLed;
-        TempSensorTMP36* pTempSensor;
+        TempSensor* pTempSensor;
         ButtonImpl* pButton;
+        LiquidCrystal_I2C* plcd;
         Context* pContext;
 };
 

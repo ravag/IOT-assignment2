@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include "kernel\Logger.h"
 
-LandingTask::LandingTask(ServoMotor* pMotor, PresenceSensor* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext):
+LandingTask::LandingTask(ServoMotor* pMotor, Pir* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext):
 pMotor(pMotor), pPIR(pPIR), pSonar(pSonar), pLCD(pLCD), pContext(pContext) {
     setState(IDLE);
 }
@@ -19,7 +19,7 @@ void LandingTask::tick(){
                 setState(DOOR_CLOSING);
             }
 
-            if(!pContext->isInPreAlarm() && this->recievedSignal && this->droneIsNear()) {
+            if(!pContext->isInPreAlarm() && this->receivedSignal && this->isDroneNear()) {
                 setState(DOOR_OPENING);
             }
 

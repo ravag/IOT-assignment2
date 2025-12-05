@@ -2,8 +2,8 @@
 #define __CONFIG__
 
 #define MOTOR_PIN 13
-#define TRIG_PIN 12
-#define ECHO_PIN 11
+#define TRIG_PIN 11
+#define ECHO_PIN 12
 #define PROX_PIN 10
 #define BUTTON_PIN 3
 #define ON_LED 7
