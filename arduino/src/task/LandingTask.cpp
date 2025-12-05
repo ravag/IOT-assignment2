@@ -11,7 +11,7 @@ pMotor(pMotor), pPIR(pPIR), pSonar(pSonar), pLCD(pLCD), pContext(pContext) {
 }
 
 void LandingTask::tick(){
-    if (pContext->isDroneIn()) {
+    if (!pContext->isDroneIn()) {
         switch(state){
             case IDLE: {
                 if(this->checkAndSetJustEntered()){
