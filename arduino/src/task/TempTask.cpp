@@ -13,6 +13,9 @@ void TempTask::tick() {
     float temp = pTempSensor->getTemperature();
     switch (state) {
     case IDLE:
+        if(justEntered) {
+            Logger.log("loIDLE-TEMP");
+        }
         if (temp > TEMP_T1) {
             setState(O_T1);
             timeLastState = 0;
@@ -20,6 +23,9 @@ void TempTask::tick() {
         break;
 
     case O_T1:
+        if(justEntered) {
+            Logger.log("loT1-TEMP");
+        }
         if (temp < TEMP_T1) {
             setState(IDLE);
             pContext->setPreAlarmOff();
@@ -35,6 +41,9 @@ void TempTask::tick() {
         break;
 
     case O_T2:
+        if(justEntered) {
+            Logger.log("loT2-TEMP");
+        }
         if (temp < TEMP_T2) {
             setState(O_T1);
             timeLastState = timeLastState + elapsedTimeInState();
@@ -50,6 +59,9 @@ void TempTask::tick() {
         break;
 
     case W_NM:
+        if(justEntered) {
+            Logger.log("loWN-TEMP");
+        }
         if (temp > TEMP_T2) {
             setState(O_T2);
         } else if (temp < TEMP_T1) {
@@ -59,6 +71,11 @@ void TempTask::tick() {
         break;
 
     case W_RS:
+        if(justEntered) {
+            Logger.log("loALARM-TEMP");
+            plcd->setCursor(1,1);
+            plcd->print("ALARM");
+        }
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
             pLed->switchOff();
