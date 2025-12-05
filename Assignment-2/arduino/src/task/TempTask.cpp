@@ -4,8 +4,8 @@
 
 long timeLastState;
 
-TempTask::TempTask(Led* pLed, TempSensor* pTempSensor, ButtonImpl* pButton, Context* pContext) :
-    pContext(pContext), pLed(pLed), pTempSensor(pTempSensor), pButton(pButton) {
+TempTask::TempTask(Led* pLed, TempSensor* pTempSensor, ButtonImpl* pButton, LiquidCrystal_I2C* plcd, Context* pContext) :
+    pContext(pContext), pLed(pLed), pTempSensor(pTempSensor), plcd(plcd), pButton(pButton) {
         setState(IDLE);
 }
 

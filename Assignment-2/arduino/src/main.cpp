@@ -29,6 +29,7 @@ void setup() {
   LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
   TempSensor* pTempSensor = new TempSensorTMP36(TEMP_PIN);
   Led* pLed = new Led(ON_LED);
+  Pir* pir = new Pir(PROX_PIN);
   
 
   Task* pTempTask = new TempTask(new Led(ALARM_LED), pTempSensor, new ButtonImpl(BUTTON_PIN), &lcd, pContext);
@@ -37,7 +38,7 @@ void setup() {
   Task* pTakeOffTask = new TakeOffTask(pContext, pSonar, pMotor, &lcd, pTempSensor);
   pTakeOffTask->init(500);
 
-  Task* pLandingTask = new LandingTask(pMotor, new Pir(PROX_PIN), pSonar, &lcd, pContext);
+  Task* pLandingTask = new LandingTask(pMotor, pir, pSonar, &lcd, pContext);
   pLandingTask->init(500);
 
   Task* pBlinkingTask = new BlinkingTask(new Led(IN_ACTION_LED), pContext);
@@ -49,6 +50,7 @@ void setup() {
   sched.addTask(pBlinkingTask);
 
   pLed->switchOn();
+  pir->calibrate();
 }
 
 void loop() {
