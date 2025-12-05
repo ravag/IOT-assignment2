@@ -33,6 +33,8 @@ void TakeOffTask::tick() {
                 {
                     justEntered = false;
                     Logger.log("[TakeOffTask]: Entered Idle State");
+                    lcd->clear();
+                    lcd->print("DRONE INSIDE");
                 }
                 
                 msg = MsgService.receiveMsg();
