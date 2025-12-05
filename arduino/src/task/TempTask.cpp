@@ -17,10 +17,10 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loIDLE-TEMP");
+            timeLastState = 0;
         }
         if (temp > TEMP_T1) {
             setState(O_T1);
-            timeLastState = 0;
         }
         break;
 
