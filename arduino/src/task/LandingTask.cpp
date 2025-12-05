@@ -16,7 +16,7 @@ void LandingTask::tick(){
             case IDLE: {
                 if(this->checkAndSetJustEntered()){
                     pLCD->clear();
-                    pLCD->print("DRONE IN");
+                    pLCD->print("DRONE OUT");
                     Logger.log(F("[LT] IDLE"));
                 }
 
@@ -93,6 +93,7 @@ void LandingTask::tick(){
                     setState(ALARM);
                 } else if(!this->isDoorOpen() && !pContext->isInAlarm()) {
                     setState(IDLE);
+                    pContext->setDroneIn();
                 }
                 break;
             }
