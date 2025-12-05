@@ -19,7 +19,7 @@ void LandingTask::tick(){
             if(pContext->isInAlarm()) {
                 setState(DOOR_CLOSING);
             }
-            Msg* msg = MsgService.receiveMsg(); 
+            msg = MsgService.receiveMsg(); 
             if(!pContext->isInPreAlarm() && msg->getContent() == "rl" && this->isDroneNear()) {
                 setState(DOOR_OPENING);
             }
@@ -113,7 +113,6 @@ void LandingTask::tick(){
 
         case ALARM: {
             if(this->checkAndSetJustEntered()){
-                pLCD->print("ALARM");
                 Logger.log(F("[LT] ALARM"));
             }
 

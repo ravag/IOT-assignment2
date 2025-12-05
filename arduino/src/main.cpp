@@ -32,8 +32,10 @@ void setup() {
   Pir* pir = new Pir(PROX_PIN);
 
   lcd->init();
+  pMotor->on();
   pMotor->setPosition(0);
-  
+  Serial.print("lo");
+  Serial.println(pMotor->getPosition());
 
   Task* pTempTask = new TempTask(new Led(ALARM_LED), pTempSensor, new ButtonImpl(BUTTON_PIN), lcd, pContext);
   pTempTask->init(500);

@@ -7,9 +7,9 @@ TakeOffTask :: TakeOffTask(Context* pContext, Sonar* pSensor, ServoMotor* pMotor
  context(pContext),sensor(pSensor), motor(pMotor), lcd(pLcd), temp(pTemp) {
     setState(IDLE);
     Serial.println("lo idle set");
-    /* lcd->clear();
+    lcd->clear();
     lcd->setCursor(2,1) ; 
-    lcd->print("DRONE INSIDE"); */
+    lcd->print("DRONE INSIDE");
     Serial.println("lo lcd problem");
     this->alreadyOver = false;
     this->alarm = false;
@@ -64,7 +64,7 @@ void TakeOffTask::tick() {
             dt = millis() - timeInState;
             motor->setPosition(((float)(dt/TIME_TO_OPEN))*90);
 
-            if (this->motor->getPosition() == 90)
+            if (this->motor->getPosition() >= 90)
             {
                 this->setState(OPEN);
             }
@@ -84,8 +84,9 @@ void TakeOffTask::tick() {
             /*se sei sopra una distaza d per t secondi comincia a chiudere*/
             if (dist > CLOSING_DISTANCE || dist == NO_OBJ_DETECTED) {
                 if (alreadyOver) {
-                    timePass += millis() - lastTime;
+                    timePass = millis() - lastTime;
                     if (timePass > DISTANCE_TIME) {
+                        Logger.log("lo[TakeOffTask]: time passed -> " + timePass);
                         this->setState(CLOSING);
                         lcd->clear();
                         lcd->setCursor(2,1);

@@ -1,6 +1,7 @@
 #include "TempTask.h"
 #include "config.h"
 #include "kernel/Logger.h"
+#include "string.h"
 
 long timeLastState;
 
@@ -18,6 +19,8 @@ void TempTask::tick() {
             Logger.log("loIDLE-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
+        Serial.print("lo");
+        Serial.println(pTempSensor->getTemperature());
         if (temp > TEMP_T1) {
             setState(O_T1);
             timeLastState = 0;

@@ -8,6 +8,7 @@
 #include "LiquidCrystal_I2C.h"
 #include "kernel\Task.h"
 #include "model\Context.h"
+#include "kernel/MsgService.h"
 #include <Arduino.h>
 
 #define CLOSING_DISTANCE 1.0
@@ -39,6 +40,7 @@ class LandingTask: public Task {
         ProximitySensor* pSonar;
         LiquidCrystal_I2C* pLCD;
         Context* pContext;
+        Msg* msg;
         long lastTime;
         long timeInState;
 };
