@@ -26,6 +26,7 @@ class LandingTask: public Task {
         void closeDoor();
         void openDoor();
         bool isDoorOpen();
+        bool isDroneNear();
 
         enum State { IDLE, DOOR_OPENING, DOOR_OPEN, DRONE_LANDED, DOOR_CLOSING, ALARM } state;
         bool justEntered;

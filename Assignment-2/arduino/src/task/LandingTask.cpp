@@ -164,3 +164,6 @@ bool LandingTask::isDoorOpen(){
     return pMotor->getPosition() == 0;
 }
 
+bool LandingTask::isDroneNear(){
+    return pSonar->getDistance() < CLOSING_DISTANCE;
+}
