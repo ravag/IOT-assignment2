@@ -20,7 +20,7 @@ void BlinkingTask::tick(){
                 setState(OFF);
             }
 
-            if(this->isActive()){
+            if(pContext->isBlinking()){
                 setState(ON);
             }
 
@@ -30,16 +30,13 @@ void BlinkingTask::tick(){
         case OFF: {
             if(this->checkAndSetJustEntered()){
                 pLed->switchOff();
-                Logger.log(F("[BT] IDLE"));
+                Logger.log(F("[BT] OFF"));
             }
 
-            if(pContext->isInAlarm()){
-                setState(IDLE);
-            } else {
-                if(!this->isActive()){
-                    setState(IDLE);
-                }
+            if(pContext->isBlinking()){
                 setState(ON);
+            } else if(!pContext->isInAlarm()) {
+                setState(IDLE);
             }
 
             break;
@@ -48,16 +45,13 @@ void BlinkingTask::tick(){
         case ON: {
             if(this->checkAndSetJustEntered()){
                 pLed->switchOn();
-                Logger.log(F("[BT] IDLE"));
+                Logger.log(F("[BT] ON"));
             }
 
-            if(pContext->isInAlarm()){
-                setState(IDLE);
-            } else {
-                if(!this->isActive()){
-                    setState(IDLE);
-                }
+            if(pContext->isBlinking()){
                 setState(OFF);
+            } else if(!pContext->isInAlarm()) {
+                setState(IDLE);
             }
 
             break;
