@@ -23,11 +23,11 @@ float Sonar::getDistance(){
     digitalWrite(trigPin,LOW);
     
     float tUS = pulseIn(echoPin, HIGH, timeOut);
-    if (tUS == 0) {
-        return NO_OBJ_DETECTED;
+    if (tUS > 0) {
+      float t = tUS / 1000.0 / 1000.0 / 2;
+      float d = t*getSoundSpeed();
+      return d;  
     } else {
-        float t = tUS / 1000.0 / 1000.0 / 2;
-        float d = t*getSoundSpeed();
-        return d;  
+      return NO_OBJ_DETECTED;   
     }
 }
