@@ -39,6 +39,9 @@ void TempTask::tick() {
             setState(W_NM);
             timeLastState = 0;
             pContext->setPreAlarmOn();
+            plcd->clear();
+            plcd->setCursor(2,1);
+            plcd->print("PRE ALARM");
         } 
         else if (temp > TEMP_T2) {
             timeLastState = elapsedTimeInState();
@@ -58,12 +61,18 @@ void TempTask::tick() {
         } else if (elapsedTimeInState() > T_MAX_4) {
             Serial.println("loSono stato sopra i 35 per piu di 2 secondi");
             setState(W_RS);
-            pContext->setAlarmOn();
             pContext->setPreAlarmOff();
+            pContext->setAlarmOn();
+            plcd->clear();
+            plcd->setCursor(1,1);
+            plcd->print("ALARM");
             pLed->switchOn();
             pButton->resetButton();
         } else if (elapsedTimeInState() + timeLastState > T_MAX_3) {
             pContext->setPreAlarmOn();
+            plcd->clear();
+            plcd->setCursor(2,1);
+            plcd->print("PRE ALARM");
         }
         break;
 
@@ -86,9 +95,6 @@ void TempTask::tick() {
             checkAndSetJustEntered();
             Logger.log("loALARM-TEMP");
             Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
-            plcd->clear();
-            plcd->setCursor(1,1);
-            plcd->print("ALARM");
         }
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
