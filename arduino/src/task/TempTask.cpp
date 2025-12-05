@@ -30,7 +30,6 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loT1-TEMP");
-            Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
         if (temp < TEMP_T1) {
             setState(IDLE);
@@ -39,6 +38,7 @@ void TempTask::tick() {
             setState(W_NM);
             timeLastState = 0;
             pContext->setPreAlarmOn();
+            Logger.log("lo Sono in PRE-ALLARME");
             plcd->clear();
             plcd->setCursor(2,1);
             plcd->print("PRE ALARM");
@@ -53,13 +53,11 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loT2-TEMP");
-            Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
         if (temp < TEMP_T2) {
             setState(O_T1);
             timeLastState = timeLastState + elapsedTimeInState();
         } else if (elapsedTimeInState() > T_MAX_4) {
-            Serial.println("loSono stato sopra i 35 per piu di 2 secondi");
             setState(W_RS);
             pContext->setPreAlarmOff();
             pContext->setAlarmOn();
@@ -70,6 +68,7 @@ void TempTask::tick() {
             pButton->resetButton();
         } else if (elapsedTimeInState() + timeLastState > T_MAX_3) {
             pContext->setPreAlarmOn();
+            Logger.log("lo Sono in PRE-ALLARME");
             plcd->clear();
             plcd->setCursor(2,1);
             plcd->print("PRE ALARM");
@@ -80,7 +79,6 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loWN-TEMP");
-            Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
         if (temp > TEMP_T2) {
             setState(O_T2);
@@ -94,7 +92,6 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("loALARM-TEMP");
-            Logger.log("loTemp: " + (int)pTempSensor->getTemperature());
         }
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
