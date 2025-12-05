@@ -38,7 +38,7 @@ void TakeOffTask::tick() {
             Msg* msg = MsgService.receiveMsg();
             if (msg != NULL)
             {
-                if (msg->getContent() == "Depart" && !this->context->isInPreAlarm())
+                if (msg->getContent() == "rtk" && !this->context->isInPreAlarm())
                 {
                     this->setState(OPENING);
                     this->context->setBlinkingOn();
@@ -56,7 +56,7 @@ void TakeOffTask::tick() {
             {
                 this->motor->on();
                 justEntered = false;
-                Logger.log("[TakeOffTask]: Entered Opening State");
+                Logger.log("lo[TakeOffTask]: Entered Opening State");
             }
             
             long dt = millis() - timeInState;
@@ -74,7 +74,7 @@ void TakeOffTask::tick() {
             {
                 this->motor->off();
                 justEntered = false;
-                Logger.log("[TakeOffTask]: Entered Open State");
+                Logger.log("lo[TakeOffTask]: Entered Open State");
             }
 
             sensor->setTemperature(temp->getTemperature());
@@ -107,7 +107,7 @@ void TakeOffTask::tick() {
             {
                 this->motor->on();
                 justEntered = false;
-                Logger.log("[TakeOffTask]: Entered Closing State");
+                Logger.log("lo[TakeOffTask]: Entered Closing State");
             }
 
             long dt = millis() - timeInState;
@@ -125,7 +125,7 @@ void TakeOffTask::tick() {
             if (justEntered)
             {
                 justEntered = false;
-                Logger.log("[TakeOffTask]: Entered Alarm State");
+                Logger.log("lo[TakeOffTask]: Entered Alarm State");
             }
         
             if (!this->context->isInAlarm())
