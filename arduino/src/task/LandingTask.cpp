@@ -92,7 +92,6 @@ void LandingTask::tick(){
                     pMotor->on();     
                     Logger.log(F("[LT] DOOR CLOSING"));
                 }
-                this->closeDoor();
 
                 if(this->isDoorClosed() && pContext->isInAlarm()) {
                     pContext->setBlinkingOff();
@@ -101,6 +100,8 @@ void LandingTask::tick(){
                     pContext->setDroneIn();
                     pContext->setBlinkingOff();
                     setState(IDLE);
+                } else {
+                    this->closeDoor();
                 }
                 break;
             }

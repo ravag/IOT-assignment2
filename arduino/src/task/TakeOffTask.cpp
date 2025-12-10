@@ -134,7 +134,7 @@ void TakeOffTask::tick() {
                     Logger.log("lo[TakeOffTask]: Entered Closing State");
                 }
 
-                closeDoor();
+                
 
                 if (motor->getPosition() <= 0)
                 {
@@ -146,6 +146,8 @@ void TakeOffTask::tick() {
                         this->context->setDroneOut();
                     }
                     
+                } else {
+                    closeDoor();
                 }
                 
                 break;

@@ -84,7 +84,16 @@ void TempTask::tick() {
             setState(O_T2);
         } else if (temp < TEMP_T1) {
             setState(IDLE);
-            pContext->setPreAlarmOff();
+            if (pContext->isInPreAlarm()) {
+                pContext->setPreAlarmOff();
+                plcd->clear();
+                plcd->setCursor(2,1);
+                if(pContext->isDroneIn()) {
+                    plcd->print("DRONE INSIDE");
+                } else {
+                    plcd->print("DRONE OUTSIDE");
+                }
+            }
         }
         break;
 
@@ -96,6 +105,13 @@ void TempTask::tick() {
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
             pLed->switchOff();
+            plcd->clear();
+            plcd->setCursor(2,1);
+            if(pContext->isDroneIn()) {
+                plcd->print("DRONE INSIDE");
+            } else {
+                plcd->print("DRONE OUTSIDE");
+            }
             setState(IDLE);
         }
         break;
