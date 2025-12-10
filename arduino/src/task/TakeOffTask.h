@@ -32,17 +32,18 @@ private:
     float dist;
     long timePass;
     long lastTime;
-    long dt;
     bool alreadyOver;
     bool alarm;
     bool justEntered;
-    int timeInState;
+    long timeInState;
     float currentPosition;
 
     enum State {OPENING, CLOSING, ALARM, IDLE, OPEN} state;
 
     void setState(State s);
     bool checkAndSetJustEntered();
+    void openDoor();
+    void closeDoor();
 };
 
 #endif

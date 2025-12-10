@@ -20,10 +20,22 @@ bool TakeOffTask::checkAndSetJustEntered(){
     return bak;
 }
 
+void TakeOffTask::closeDoor(){
+    long dt = millis() - timeInState;
+    currentPosition = dt / TIME_TO_OPEN;
+    motor->setPosition(90 - (currentPosition * 90));
+}
+
+void TakeOffTask::openDoor(){
+    long dt = millis() - timeInState;
+    currentPosition = dt / TIME_TO_OPEN;
+    motor->setPosition(currentPosition * 90);
+}
+
 void TakeOffTask::setState(State s) {
     state = s;
-    timeInState = millis();
     this->justEntered = true;
+    timeInState = millis();
 }
 
 void TakeOffTask::tick() {
@@ -69,12 +81,9 @@ void TakeOffTask::tick() {
                     this->motor->on();
                     Logger.log("lo[TakeOffTask]: Entered Opening State");
                 }
-                
-                dt = millis() - timeInState;
-                currentPosition = ((float)dt/TIME_TO_OPEN);
-                Serial.print("lo[TAKEOFFTASK] position: ");
-                Serial.println(currentPosition);
-                motor->setPosition(currentPosition*90);
+
+                openDoor();
+
 
                 if (this->motor->getPosition() >= 90)
                 {
@@ -125,11 +134,7 @@ void TakeOffTask::tick() {
                     Logger.log("lo[TakeOffTask]: Entered Closing State");
                 }
 
-                dt = millis() - timeInState;
-                currentPosition = ((float)dt/TIME_TO_OPEN);
-                Serial.print("lo[TAKEOFFTASK] position: ");
-                Serial.println(currentPosition);
-                motor->setPosition( 90 - (currentPosition * 90));
+                closeDoor();
 
                 if (motor->getPosition() <= 0)
                 {
