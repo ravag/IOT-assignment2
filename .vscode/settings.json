@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": [
+        "java\\src"
+    ],
+    "java.project.referencedLibraries": [
+        "java\\lib\\jssc-2.9.4.jar"
+    ]
+}

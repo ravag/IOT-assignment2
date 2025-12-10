@@ -45,6 +45,8 @@ public class DashBoardView extends JFrame implements ActionListener{
         mainPanel.add(Box.createRigidArea(new Dimension(0,20)));
         setContentPane(mainPanel);
 
+        setLocationRelativeTo(null);
+
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 System.exit(-1);
