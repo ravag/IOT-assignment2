@@ -120,6 +120,7 @@ void LandingTask::tick(){
 void LandingTask::setState(State s){
     state = s;
     justEntered = true;
+    timeInState = millis();
 }
 
 bool LandingTask::checkAndSetJustEntered(){
