@@ -88,18 +88,19 @@ void LandingTask::tick(){
             }
 
             case DOOR_CLOSING: {
-                if(this->checkAndSetJustEntered()){   
-                    pContext->setBlinkingOn();    
+                if(this->checkAndSetJustEntered()){    
                     pMotor->on();     
                     Logger.log(F("[LT] DOOR CLOSING"));
                 }
                 this->closeDoor();
 
                 if(this->isDoorClosed() && pContext->isInAlarm()) {
+                    pContext->setBlinkingOff();
                     setState(ALARM);
                 } else if(this->isDoorClosed() && !pContext->isInAlarm()) {
-                    setState(IDLE);
                     pContext->setDroneIn();
+                    pContext->setBlinkingOff();
+                    setState(IDLE);
                 }
                 break;
             }
@@ -142,7 +143,6 @@ void LandingTask::closeDoor(){
 
     if(pMotor->getPosition() <= 0){
         pMotor->off();
-        pContext->setBlinkingOff();
     }
 }
 
@@ -153,7 +153,6 @@ void LandingTask::openDoor(){
 
     if(pMotor->getPosition() >= 90){
         pMotor->off();
-        pContext->setBlinkingOff();
     }
 }
 
