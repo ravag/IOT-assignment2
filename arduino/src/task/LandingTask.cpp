@@ -169,7 +169,7 @@ bool LandingTask::isDoorClosed(){
 
 bool LandingTask::isDroneNear(){
     if(pPIR->isDetected()){
-        Logger.log(F("[LT] DRONE DETECTED"));
+        Logger.log("[LT] DRONE DETECTED");
         return true;
     } else {
         Logger.log("[LT] DRONE NOT DETECTED");

@@ -18,6 +18,8 @@ public class LogView extends JFrame {
         JScrollPane scroll = new JScrollPane(log);
         mainPanel.add(scroll);
         this.getContentPane().add(mainPanel);
+
+        this.setLocation(0, 150);
     }
 
     public void log(String msg){

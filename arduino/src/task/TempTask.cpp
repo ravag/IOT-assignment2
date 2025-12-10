@@ -1,6 +1,7 @@
 #include "TempTask.h"
 #include "config.h"
 #include "kernel/Logger.h"
+#include "kernel/DroneService.h"
 #include "string.h"
 
 long timeLastState;
@@ -99,10 +100,16 @@ void TempTask::tick() {
         if(justEntered) {
             checkAndSetJustEntered();
             Logger.log("[TEMP]: ALARM");
+            if (!pContext->isDroneIn()) {
+                droneService.droneMessage("ALARM!!"); //Landing in NOT possible! ");
+            }
         }
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
             pLed->switchOff();
+            if (!pContext->isDroneIn()) {
+                droneService.droneMessage("no alarm!"); // Landing is now POSSIBLE! We are waiting for you :)");
+            }
             setState(IDLE);
         }
         break;

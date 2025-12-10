@@ -54,8 +54,7 @@ void TakeOffTask::tick() {
             case IDLE:
                 if (checkAndSetJustEntered())
                 {
-                    Serial.println("lo:[TakeOffTask]: Entered Idle State");
-                    Logger.log("[TakeOffTask]: Entered Idle State");
+                    Logger.log("[TO]: Idle");
                     lcd->clear();
                     lcd->setCursor(2,1);
                     lcd->print("DRONE INSIDE");
@@ -81,7 +80,7 @@ void TakeOffTask::tick() {
                 if (checkAndSetJustEntered())
                 {
                     this->motor->on();
-                    Logger.log("lo[TakeOffTask]: Entered Opening State");
+                    Logger.log("[TO]: Opening");
                 }
 
                 openDoor();
@@ -98,15 +97,15 @@ void TakeOffTask::tick() {
                 if (checkAndSetJustEntered())
                 {
                     this->motor->off();
-                    Logger.log("lo[TakeOffTask]: Entered Open State");
+                    Logger.log("[TO]: Open");
                     alreadyOver = false;
                 }
 
                 sensor->setTemperature(temp->getTemperature());
                 dist = sensor->getDistance();
                 /*se sei sopra una distaza d per t secondi comincia a chiudere*/
-                /* Serial.print("lo");
-                Serial.println(dist); */
+                Serial.print("lo");
+                Serial.println(dist);
                 if (dist > CLOSING_DISTANCE || dist == NO_OBJ_DETECTED) {
                     if (alreadyOver) {
                         timePass = millis() - lastTime;
@@ -130,7 +129,7 @@ void TakeOffTask::tick() {
                 if(checkAndSetJustEntered())
                 {
                     this->motor->on();
-                    Logger.log("lo[TakeOffTask]: Entered Closing State");
+                    Logger.log("[TO]: Closing");
                 }
 
                 
@@ -153,7 +152,7 @@ void TakeOffTask::tick() {
             case ALARM:
                 if (checkAndSetJustEntered())
                 {
-                    Logger.log("lo[TakeOffTask]: Entered Alarm State");
+                    Logger.log("[TO]: Alarm");
                 }
             
                 if (!this->context->isInAlarm())
