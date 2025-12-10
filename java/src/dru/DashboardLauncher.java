@@ -9,7 +9,7 @@ public class DashboardLauncher {
         view = new DashBoardView();
         log = new LogView();
 
-        String portName = "COM14";
+        String portName = "COM4";
         DashboardController contr = new DashboardController(portName, view, log);
         view.registerController(contr);
 

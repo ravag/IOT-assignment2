@@ -22,7 +22,7 @@ public class DashBoardView extends JFrame implements ActionListener{
     private DashboardController controller;
     
     public DashBoardView(){
-        super(".:: Sweeping System ::.");
+        super(".:: DRU ::.");
         setSize(600,150);
         this.setResizable(false);
 
