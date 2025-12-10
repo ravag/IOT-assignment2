@@ -1,6 +1,7 @@
 #include "TakeOffTask.h"
 #include "BlinkingTask.h"
 #include "kernel/Logger.h"
+#include "config.h"
 
 
 TakeOffTask :: TakeOffTask(Context* pContext, Sonar* pSensor, ServoMotor* pMotor, LiquidCrystal_I2C* pLcd, TempSensor* pTemp):
@@ -53,9 +54,10 @@ void TakeOffTask::tick() {
             case IDLE:
                 if (checkAndSetJustEntered())
                 {
-                    motor->setPosition(0);
+                    Serial.println("lo:[TakeOffTask]: Entered Idle State");
                     Logger.log("[TakeOffTask]: Entered Idle State");
                     lcd->clear();
+                    lcd->setCursor(2,1);
                     lcd->print("DRONE INSIDE");
                 }
                 
@@ -103,16 +105,13 @@ void TakeOffTask::tick() {
                 sensor->setTemperature(temp->getTemperature());
                 dist = sensor->getDistance();
                 /*se sei sopra una distaza d per t secondi comincia a chiudere*/
-                Serial.print("lo");
-                Serial.println(dist);
+                /* Serial.print("lo");
+                Serial.println(dist); */
                 if (dist > CLOSING_DISTANCE || dist == NO_OBJ_DETECTED) {
                     if (alreadyOver) {
                         timePass = millis() - lastTime;
                         if (timePass > DISTANCE_TIME) {
                             this->setState(CLOSING);
-                            lcd->clear();
-                            lcd->setCursor(2,1);
-                            lcd->print("DRONE OUT");
                         }
                         
                     } else {

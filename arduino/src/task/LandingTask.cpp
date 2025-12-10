@@ -2,8 +2,7 @@
 #include <Arduino.h>
 #include "kernel\Logger.h"
 #include "kernel/MsgService.h"
-
-static float dist2 = 0.1;
+#include "config.h"
 
 LandingTask::LandingTask(ServoMotor* pMotor, Pir* pPIR, ProximitySensor* pSonar, LiquidCrystal_I2C* pLCD, Context* pContext):
 pMotor(pMotor), pPIR(pPIR), pSonar(pSonar), pLCD(pLCD), pContext(pContext) {
@@ -15,9 +14,9 @@ void LandingTask::tick(){
         switch(state){
             case IDLE: {
                 if(this->checkAndSetJustEntered()){
-                    pMotor->setPosition(0);
                     pLCD->clear();
-                    pLCD->print("DRONE OUT");
+                    pLCD->setCursor(2,1);
+                    pLCD->print("DRONE OUTSIDE");
                     Logger.log(F("[LT] IDLE"));
                 }
 
@@ -36,6 +35,7 @@ void LandingTask::tick(){
                 if(this->checkAndSetJustEntered()){     
                     pContext->setBlinkingOn();
                     pLCD->clear();
+                    pLCD->setCursor(2,1);
                     pLCD->print("LANDING");
                     pMotor->on();
                     Logger.log(F("[LT] DOOR OPENING"));
@@ -54,6 +54,8 @@ void LandingTask::tick(){
             }
 
             case DOOR_OPEN: {
+                float distance;
+                distance = pSonar->getDistance();
                 if(this->checkAndSetJustEntered()){
                     Logger.log(F("[LT] DOOR OPEN"));
                     pMotor->off();
@@ -61,7 +63,7 @@ void LandingTask::tick(){
 
                 if(pContext->isInAlarm()) {
                     setState(DOOR_CLOSING);
-                } else if (pSonar->getDistance() <= dist2) {
+                } else if (distance <= DISTANCE_MIN && distance >= 0) {
                     this->setState(DRONE_LANDED);
                 }
                 break;
@@ -79,7 +81,7 @@ void LandingTask::tick(){
 
                 if(pContext->isInAlarm()) {
                     setState(DOOR_CLOSING);
-                } else if(pSonar->getDistance() > dist2) {
+                } else if(pSonar->getDistance() > DISTANCE_MIN) {
                     setState(DOOR_OPEN);
                 } else if (millis() - lastTime >= DISTANCE_TIME) {
                     this->setState(DOOR_CLOSING);    

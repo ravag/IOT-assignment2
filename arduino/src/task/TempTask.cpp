@@ -6,7 +6,7 @@
 long timeLastState;
 
 TempTask::TempTask(Led* pLed, TempSensor* pTempSensor, ButtonImpl* pButton, LiquidCrystal_I2C* plcd, Context* pContext) :
-    pContext(pContext), pLed(pLed), pTempSensor(pTempSensor), plcd(plcd), pButton(pButton) {
+     pLed(pLed), pTempSensor(pTempSensor), pButton(pButton), plcd(plcd), pContext(pContext) {
         setState(IDLE);
 }
 
@@ -16,7 +16,7 @@ void TempTask::tick() {
     case IDLE:
         if(justEntered) {
             checkAndSetJustEntered();
-            Logger.log("loIDLE-TEMP");
+            Logger.log("[TEMP]: IDLE");
             timeLastState = 0;
         }
         if (temp > TEMP_T1) {
@@ -25,11 +25,9 @@ void TempTask::tick() {
         break;
 
     case O_T1:
-        Serial.print("lo");
-        Serial.println(pTempSensor->getTemperature());
         if(justEntered) {
             checkAndSetJustEntered();
-            Logger.log("loT1-TEMP");
+            Logger.log("[TEMP]: OVER TEMP 1 (30 degrees)");
         }
         if (temp < TEMP_T1) {
             setState(IDLE);
@@ -38,7 +36,7 @@ void TempTask::tick() {
             setState(W_NM);
             timeLastState = 0;
             pContext->setPreAlarmOn();
-            Logger.log("lo Sono in PRE-ALLARME");
+            Logger.log("[TEMP]: PRE ALARM");
             plcd->clear();
             plcd->setCursor(2,1);
             plcd->print("PRE ALARM");
@@ -52,7 +50,7 @@ void TempTask::tick() {
     case O_T2:
         if(justEntered) {
             checkAndSetJustEntered();
-            Logger.log("loT2-TEMP");
+            Logger.log("[TEMP]: OVER TEMP 2 (33 degrees)");
         }
         if (temp < TEMP_T2) {
             setState(O_T1);
@@ -62,13 +60,13 @@ void TempTask::tick() {
             pContext->setPreAlarmOff();
             pContext->setAlarmOn();
             plcd->clear();
-            plcd->setCursor(1,1);
+            plcd->setCursor(2,1);
             plcd->print("ALARM");
             pLed->switchOn();
             pButton->resetButton();
         } else if (elapsedTimeInState() + timeLastState > T_MAX_3) {
             pContext->setPreAlarmOn();
-            Logger.log("lo Sono in PRE-ALLARME");
+            Logger.log("[TEMP]: PRE ALARM");
             plcd->clear();
             plcd->setCursor(2,1);
             plcd->print("PRE ALARM");
@@ -78,7 +76,7 @@ void TempTask::tick() {
     case W_NM:
         if(justEntered) {
             checkAndSetJustEntered();
-            Logger.log("loWN-TEMP");
+            Logger.log("[TEMP]: WAITING NORMAL TEMP");
         }
         if (temp > TEMP_T2) {
             setState(O_T2);
@@ -100,18 +98,11 @@ void TempTask::tick() {
     case W_RS:
         if(justEntered) {
             checkAndSetJustEntered();
-            Logger.log("loALARM-TEMP");
+            Logger.log("[TEMP]: ALARM");
         }
         if (pButton->isPressed()) {
             pContext->setAlarmOff();
             pLed->switchOff();
-            plcd->clear();
-            plcd->setCursor(2,1);
-            if(pContext->isDroneIn()) {
-                plcd->print("DRONE INSIDE");
-            } else {
-                plcd->print("DRONE OUTSIDE");
-            }
             setState(IDLE);
         }
         break;

@@ -11,8 +11,6 @@
 #include <LiquidCrystal_I2C.h>
 
 #define CLOSING_DISTANCE 1.0
-#define DISTANCE_TIME 3000
-#define TIME_TO_OPEN 5000.0
 
 class TakeOffTask : public Task {
 

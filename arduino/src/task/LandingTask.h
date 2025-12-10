@@ -11,8 +11,7 @@
 #include "kernel/MsgService.h"
 #include <Arduino.h>
 
-#define DISTANCE_TIME 3000
-#define TIME_TO_OPEN 5000.0
+#define DISTANCE_MIN 0.1
 
 class LandingTask: public Task {
     public:

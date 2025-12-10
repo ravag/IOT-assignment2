@@ -19,13 +19,13 @@ Context* pContext;
 
 void setup() {
   MsgService.init();
-  sched.init(500);
+  sched.init(250);
   Logger.log("::::: Drone System :::::");
 
   pContext = new Context();
 
   ServoMotorImpl* pMotor = new ServoMotorImpl(MOTOR_PIN);
-  Sonar* pSonar = new Sonar(ECHO_PIN, TRIG_PIN, 250000);
+  Sonar* pSonar = new Sonar(ECHO_PIN, TRIG_PIN, 150000);
   LiquidCrystal_I2C* lcd = new LiquidCrystal_I2C(0x27,20,4);
   TempSensor* pTempSensor = new TempSensorTMP36(TEMP_PIN);
   Led* pLed = new Led(ON_LED);
@@ -42,11 +42,11 @@ void setup() {
   Serial.println("loTempTask");
 
   Task* pTakeOffTask = new TakeOffTask(pContext, pSonar, pMotor, lcd, pTempSensor);
-  pTakeOffTask->init(500);
+  pTakeOffTask->init(250);
   Serial.println("loTEST");
 
   Task* pLandingTask = new LandingTask(pMotor, pir, pSonar, lcd, pContext);
-  pLandingTask->init(500);
+  pLandingTask->init(250);
   Serial.println("lo landingTask");
 
   Task* pBlinkingTask = new BlinkingTask(new Led(IN_ACTION_LED), pContext);
