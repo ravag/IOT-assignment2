@@ -10,6 +10,16 @@ TakeOffTask :: TakeOffTask(Context* pContext, Sonar* pSensor, ServoMotor* pMotor
     this->alarm = false;
 }
 
+bool TakeOffTask::checkAndSetJustEntered(){
+    bool bak = justEntered;
+
+    if(justEntered){
+        justEntered = false;
+    }
+
+    return bak;
+}
+
 void TakeOffTask::setState(State s) {
     state = s;
     timeInState = millis();
@@ -29,9 +39,9 @@ void TakeOffTask::tick() {
         switch (this->state)
         {
             case IDLE:
-                if (justEntered)
+                if (checkAndSetJustEntered())
                 {
-                    justEntered = false;
+                    motor->setPosition(0);
                     Logger.log("[TakeOffTask]: Entered Idle State");
                     lcd->clear();
                     lcd->print("DRONE INSIDE");
@@ -42,11 +52,11 @@ void TakeOffTask::tick() {
                 {
                     if (msg->getContent() == "rtk" && !this->context->isInPreAlarm())
                     {
-                        this->setState(OPENING);
                         this->context->setBlinkingOn();
                         lcd->clear();
                         lcd->setCursor(2,1);
                         lcd->print("TAKE OFF");
+                        this->setState(OPENING);
                     }
                     
                 }
@@ -54,15 +64,17 @@ void TakeOffTask::tick() {
                 break;
 
             case OPENING:
-                if (justEntered)
+                if (checkAndSetJustEntered())
                 {
                     this->motor->on();
-                    justEntered = false;
                     Logger.log("lo[TakeOffTask]: Entered Opening State");
                 }
                 
                 dt = millis() - timeInState;
-                motor->setPosition(((float)(dt/TIME_TO_OPEN))*90);
+                currentPosition = ((float)dt/TIME_TO_OPEN);
+                Serial.print("lo[TAKEOFFTASK] position: ");
+                Serial.println(currentPosition);
+                motor->setPosition(currentPosition*90);
 
                 if (this->motor->getPosition() >= 90)
                 {
@@ -72,10 +84,9 @@ void TakeOffTask::tick() {
                 break;
 
             case OPEN:
-                if (justEntered)
+                if (checkAndSetJustEntered())
                 {
                     this->motor->off();
-                    justEntered = false;
                     Logger.log("lo[TakeOffTask]: Entered Open State");
                     alreadyOver = false;
                 }
@@ -89,7 +100,6 @@ void TakeOffTask::tick() {
                     if (alreadyOver) {
                         timePass = millis() - lastTime;
                         if (timePass > DISTANCE_TIME) {
-                            Logger.log("lo[TakeOffTask]: time passed -> " + timePass);
                             this->setState(CLOSING);
                             lcd->clear();
                             lcd->setCursor(2,1);
@@ -109,17 +119,19 @@ void TakeOffTask::tick() {
                 break;
 
             case CLOSING:
-                if(justEntered)
+                if(checkAndSetJustEntered())
                 {
                     this->motor->on();
-                    justEntered = false;
                     Logger.log("lo[TakeOffTask]: Entered Closing State");
                 }
 
                 dt = millis() - timeInState;
-                motor->setPosition( 90 - ((float)(dt/TIME_TO_OPEN) * 90));
+                currentPosition = ((float)dt/TIME_TO_OPEN);
+                Serial.print("lo[TAKEOFFTASK] position: ");
+                Serial.println(currentPosition);
+                motor->setPosition( 90 - (currentPosition * 90));
 
-                if (motor->getPosition() == 0)
+                if (motor->getPosition() <= 0)
                 {
                     this->motor->off();
                     context->setBlinkingOff();
@@ -133,9 +145,8 @@ void TakeOffTask::tick() {
                 
                 break;
             case ALARM:
-                if (justEntered)
+                if (checkAndSetJustEntered())
                 {
-                    justEntered = false;
                     Logger.log("lo[TakeOffTask]: Entered Alarm State");
                 }
             

@@ -12,7 +12,7 @@
 #include <Arduino.h>
 
 #define DISTANCE_TIME 3000
-#define TIME_TO_OPEN 5000
+#define TIME_TO_OPEN 5000.0
 
 class LandingTask: public Task {
     public:
@@ -28,6 +28,7 @@ class LandingTask: public Task {
         void openDoor();
         bool isDoorOpen();
         bool isDroneNear();
+        bool isDoorClosed();
 
         enum State { IDLE, DOOR_OPENING, DOOR_OPEN, DRONE_LANDED, DOOR_CLOSING, ALARM } state;
         bool justEntered;
@@ -42,6 +43,7 @@ class LandingTask: public Task {
         Msg* msg;
         long lastTime;
         long timeInState;
+        float currentPosition;
 };
 
 #endif

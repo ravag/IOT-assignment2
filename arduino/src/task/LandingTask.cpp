@@ -15,6 +15,7 @@ void LandingTask::tick(){
         switch(state){
             case IDLE: {
                 if(this->checkAndSetJustEntered()){
+                    pMotor->setPosition(0);
                     pLCD->clear();
                     pLCD->print("DRONE OUT");
                     Logger.log(F("[LT] IDLE"));
@@ -55,6 +56,7 @@ void LandingTask::tick(){
             case DOOR_OPEN: {
                 if(this->checkAndSetJustEntered()){
                     Logger.log(F("[LT] DOOR OPEN"));
+                    pMotor->off();
                 }
 
                 if(pContext->isInAlarm()) {
@@ -93,9 +95,9 @@ void LandingTask::tick(){
                 }
                 this->closeDoor();
 
-                if(!this->isDoorOpen() && pContext->isInAlarm()) {
+                if(this->isDoorClosed() && pContext->isInAlarm()) {
                     setState(ALARM);
-                } else if(!this->isDoorOpen() && !pContext->isInAlarm()) {
+                } else if(this->isDoorClosed() && !pContext->isInAlarm()) {
                     setState(IDLE);
                     pContext->setDroneIn();
                 }
@@ -135,7 +137,8 @@ bool LandingTask::checkAndSetJustEntered(){
 
 void LandingTask::closeDoor(){
     long dt = millis() - timeInState;
-    pMotor->setPosition(90 - ((dt / TIME_TO_OPEN) * 90));
+    currentPosition = dt / TIME_TO_OPEN;
+    pMotor->setPosition(90 - (currentPosition * 90));
 
     if(pMotor->getPosition() <= 0){
         pMotor->off();
@@ -145,7 +148,8 @@ void LandingTask::closeDoor(){
 
 void LandingTask::openDoor(){
     long dt = millis() - timeInState;
-    pMotor->setPosition((dt / TIME_TO_OPEN) * 90);
+    currentPosition = dt / TIME_TO_OPEN;
+    pMotor->setPosition(currentPosition * 90);
 
     if(pMotor->getPosition() >= 90){
         pMotor->off();
@@ -155,6 +159,10 @@ void LandingTask::openDoor(){
 
 bool LandingTask::isDoorOpen(){
     return pMotor->getPosition() >= 90;
+}
+
+bool LandingTask::isDoorClosed(){
+    return pMotor->getPosition() <= 0;
 }
 
 bool LandingTask::isDroneNear(){
