@@ -34,24 +34,18 @@ void setup() {
   lcd->init();
   pMotor->on();
   pMotor->setPosition(0);
-  Serial.print("lo");
-  Serial.println(pMotor->getPosition());
 
   Task* pTempTask = new TempTask(new Led(ALARM_LED), pTempSensor, new ButtonImpl(BUTTON_PIN), lcd, pContext);
   pTempTask->init(500);
-  Serial.println("loTempTask");
 
   Task* pTakeOffTask = new TakeOffTask(pContext, pSonar, pMotor, lcd, pTempSensor);
   pTakeOffTask->init(250);
-  Serial.println("loTEST");
 
   Task* pLandingTask = new LandingTask(pMotor, pir, pSonar, lcd, pContext);
   pLandingTask->init(250);
-  Serial.println("lo landingTask");
 
   Task* pBlinkingTask = new BlinkingTask(new Led(IN_ACTION_LED), pContext);
   pBlinkingTask->init(500);
-  Serial.println("lo blinkingTask");
 
   sched.addTask(pTempTask);
   sched.addTask(pTakeOffTask);
@@ -61,11 +55,10 @@ void setup() {
   Serial.println("lo scheduled");
 
   pLed->switchOn();
-  Serial.println("calibrating");
+  Logger.log("calibrating");
   pir->calibrate();
-  Serial.println("calibrated");
+  Logger.log("calibrated");
   lcd->backlight();
-  Serial.println("lo lcd");
 }
 
 void loop() {
